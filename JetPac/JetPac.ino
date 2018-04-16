@@ -10,11 +10,11 @@ by Mike McRoberts (a.k.a. TheArduinoGuy)
 #include <Arduboy2.h>
 #include "bitmaps.h"
 #include <ArduboyTones.h>
-#include <avr/pgmspace.h>
-#include <EEPROM.h>
+#include <MicroGamerMemoryCard.h>
 
 Arduboy2 arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
+MicroGamerMemoryCard mem(1);
 
 byte level = 1;
 byte gameDifficulty = 2;
@@ -107,7 +107,7 @@ void setup()
 {
         //Serial.begin(115200);
         arduboy.boot(); // raw hardware
-        arduboy.blank(); // blank the display
+        arduboy.clear(); // blank the display
         arduboy.flashlight(); // light the RGB LED and screen if UP button is being held.
         arduboy.systemButtons();
         arduboy.bootLogo();
@@ -122,7 +122,8 @@ void setup()
         arduboy.drawSlowXYBitmap(0, 0, JETPACLOADINGSCREEN, 128, 64);
         arduboy.display();
         delay(5000);
-        EEPROM.get(SAVELOCATION, highScore);
+        mem.load();
+        highScore = *(unsigned long*)mem.data();
 }
 
 float RANDOMXL()
@@ -1039,7 +1040,10 @@ void gameOn()
 // #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
 void gameOver()
 {
-        if (score > highScore) EEPROM.put(SAVELOCATION, score); delay(100);
+        if (score > highScore) {
+          *(unsigned long*)mem.data() = score;
+          mem.save();
+        }
         arduboy.clear();
         arduboy.setTextSize(2);
         arduboy.setCursor(8, 40);
@@ -1093,7 +1097,7 @@ void gameOver()
 // #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
 void levelStart()
 {
-        EEPROM.get(SAVELOCATION, highScore);
+        //EEPROM.get(SAVELOCATION, highScore);
 
         arduboy.clear();
         arduboy.setTextSize(1);
@@ -1340,7 +1344,7 @@ arduboy.clear();
                       {
                         delay(150);
                         highScore = 0;   // First time run of program only then comment out and reload
-                        EEPROM.put(SAVELOCATION, highScore);    // First time run of program only
+                        //EEPROM.put(SAVELOCATION, highScore);    // First time run of program only
                         gameState=0;
                         break;
                       }
@@ -1365,6 +1369,7 @@ arduboy.clear();
 // #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
 void loop() {
         if (!arduboy.nextFrame()) return;  // Keep frame rate at 60fps
+        arduboy.waitDisplayUpdate();
         arduboy.clear();
 
         switch(gameState)
