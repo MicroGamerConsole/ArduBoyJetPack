@@ -7,13 +7,13 @@ by Mike McRoberts (a.k.a. TheArduinoGuy)
 
 #define SAVELOCATION (EEPROM_STORAGE_SPACE_START + 512)
 
-#include <Arduboy2.h>
+#include <MicroGamer.h>
 #include "bitmaps.h"
-#include <ArduboyTones.h>
+#include <MicroGamerTones.h>
 #include <MicroGamerMemoryCard.h>
 
-Arduboy2 arduboy;
-ArduboyTones sound(arduboy.audio.enabled);
+MicroGamer arduboy;
+MicroGamerTones sound(arduboy.audio.enabled);
 MicroGamerMemoryCard mem(1);
 
 byte level = 1;
