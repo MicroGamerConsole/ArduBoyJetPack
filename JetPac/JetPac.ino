@@ -797,11 +797,11 @@ void moveJetMan()
 // #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
 void checkButtons()
 {
-        if( arduboy.pressed(A_BUTTON) == true || arduboy.pressed(UP_BUTTON) == true) {
+        if( arduboy.pressed(Y_BUTTON) == true || arduboy.pressed(UP_BUTTON) == true) {
                 jetPacFire();
         }
 
-        if( arduboy.pressed(A_BUTTON) == false && arduboy.pressed(UP_BUTTON) == false) {
+        if( arduboy.pressed(Y_BUTTON) == false && arduboy.pressed(UP_BUTTON) == false) {
                 jetPacRelease();
         }
 
@@ -823,7 +823,7 @@ void checkButtons()
                 jetManDirection = 0;
         }
 
-        if((subState<11) && (arduboy.pressed(B_BUTTON) == true || arduboy.pressed(DOWN_BUTTON) == true) && ((millis()-lastPressed)>100))
+        if((subState<11) && (arduboy.pressed(X_BUTTON) == true || arduboy.pressed(DOWN_BUTTON) == true) && ((millis()-lastPressed)>100))
         {
                 laserbeams[laserIndex].x = jetManX + (jetManDirection ? 10 : -10);
                 laserbeams[laserIndex].length = 1;
@@ -1126,7 +1126,7 @@ void levelStart()
         //Serial.write(arduboy.getBuffer(), 128 * 64 / 8);
         do  {
                 //Serial.write(arduboy.getBuffer(), 128 * 64 / 8);
-        } while(arduboy.notPressed(A_BUTTON) && arduboy.notPressed(B_BUTTON));
+        } while(arduboy.notPressed(Y_BUTTON) && arduboy.notPressed(X_BUTTON));
         sound.tone(1000, 200);
         delay(500);
         createMonsters();
@@ -1290,7 +1290,7 @@ void menu()
                         arduboy.fillCircle(13,43,3);
                 }
 
-                if( arduboy.pressed(A_BUTTON) == true ) {
+                if( arduboy.pressed(Y_BUTTON) == true ) {
                     if (up == true)
                     {
                       delay(150);
@@ -1339,7 +1339,7 @@ arduboy.clear();
                           arduboy.fillCircle(13,43,3);
                   }
 
-                  if( arduboy.pressed(A_BUTTON) == true ) {
+                  if( arduboy.pressed(Y_BUTTON) == true ) {
                       if (up == true)
                       {
                         delay(150);
